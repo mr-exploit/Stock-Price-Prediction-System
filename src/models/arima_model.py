@@ -101,7 +101,7 @@ class ARIMAPredictor(StockPredictionModel):
                     order=self.order,
                 )
             
-            self.fitted_model = model.fit(disp=False)
+            self.fitted_model = model.fit()
             self.model = self.fitted_model
             self.is_fitted = True
             
@@ -182,10 +182,18 @@ class ARIMAPredictor(StockPredictionModel):
         forecast = forecast_result.predicted_mean
         conf_int = forecast_result.conf_int(alpha=alpha)
         
+        # Handle both DataFrame (older statsmodels) and ndarray (newer statsmodels)
+        if hasattr(conf_int, 'iloc'):
+            lower = np.array(conf_int.iloc[:, 0])
+            upper = np.array(conf_int.iloc[:, 1])
+        else:
+            lower = np.array(conf_int[:, 0])
+            upper = np.array(conf_int[:, 1])
+        
         return (
             np.array(forecast),
-            np.array(conf_int.iloc[:, 0]),
-            np.array(conf_int.iloc[:, 1]),
+            lower,
+            upper,
         )
     
     def get_params(self) -> Dict:
@@ -234,7 +242,7 @@ def auto_arima(
             for q in range(max_q + 1):
                 try:
                     model = ARIMA(y, order=(p, d, q))
-                    fitted = model.fit(disp=False)
+                    fitted = model.fit()
                     
                     score = fitted.aic if criterion == "aic" else fitted.bic
                     

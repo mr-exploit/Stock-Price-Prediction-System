@@ -107,20 +107,24 @@ class TestRandomForestPredictor:
         model.build_model()
         model.train(X, y)
         
-        with tempfile.NamedTemporaryFile(suffix=".pkl", delete=False) as f:
-            model.save_model(f.name)
+        # Create a temp file and close it before using
+        fd, temp_path = tempfile.mkstemp(suffix=".pkl")
+        os.close(fd)
+        
+        try:
+            model.save_model(temp_path)
             
             # Load into new model
             new_model = RandomForestPredictor()
-            new_model.load_model(f.name)
+            new_model.load_model(temp_path)
             
             # Predictions should be the same
             pred1 = model.predict(X[:5])
             pred2 = new_model.predict(X[:5])
             
             np.testing.assert_array_almost_equal(pred1, pred2)
-            
-            os.unlink(f.name)
+        finally:
+            os.unlink(temp_path)
 
 
 class TestARIMAPredictor:

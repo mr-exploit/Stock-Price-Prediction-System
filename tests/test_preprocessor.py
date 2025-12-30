@@ -202,9 +202,9 @@ class TestPreprocessData:
             scaler_type="minmax",
         )
         
-        # MinMaxScaler should scale data between 0 and 1
+        # MinMaxScaler should scale data between 0 and 1 (with floating-point tolerance)
         assert X_train.min() >= 0
-        assert X_train.max() <= 1
+        assert X_train.max() <= 1 + 1e-10
 
 
 class TestInverseTransformPredictions:
