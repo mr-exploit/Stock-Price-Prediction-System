@@ -1,0 +1,58 @@
+# Stock tickers to analyze
+tickers:
+  - AAPL    # Apple
+  - MSFT    # Microsoft
+  - GOOGL   # Google
+  - TSLA    # Tesla
+  - AMZN    # Amazon
+
+# Data configuration
+data:
+  start_date: "2018-01-01"
+  end_date: "2024-12-31"
+  interval: "1d"  # 1d, 1wk, 1mo
+  train_test_split: 0.8
+
+# Feature engineering
+features:
+  technical_indicators:
+    - SMA_20
+    - SMA_50
+    - SMA_200
+    - EMA_12
+    - EMA_26
+    - RSI_14
+    - MACD
+    - BB_upper
+    - BB_lower
+    - Volume_MA
+  lag_features: [1, 2, 3, 5, 10]
+  
+# Model configuration
+model:
+  type: "lstm"  # lstm, random_forest, xgboost, arima
+  lstm:
+    sequence_length: 60
+    units: [50, 50]
+    dropout: 0.2
+    epochs: 100
+    batch_size: 32
+    learning_rate: 0.001
+  random_forest:
+    n_estimators: 100
+    max_depth: 10
+  xgboost:
+    n_estimators: 100
+    learning_rate: 0.1
+
+# Prediction
+prediction:
+  days_ahead: 30
+
+# Paths
+paths:
+  raw_data: "data/raw/"
+  processed_data: "data/processed/"
+  models: "data/models/"
+  plots: "output/plots/"
+  logs: "logs/"
