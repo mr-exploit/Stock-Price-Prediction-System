@@ -2,6 +2,8 @@
 
 A Python-based stock price prediction system that fetches real-time data from Yahoo Finance and uses machine learning models to predict future stock prices for international markets.
 
+> **🇮🇩 Panduan Bahasa Indonesia**: Lihat [PANDUAN_PENGGUNAAN.md](PANDUAN_PENGGUNAAN.md) untuk panduan langkah demi langkah dalam Bahasa Indonesia.
+
 ## Features
 
 - **Data Collection**: Fetch historical stock data from Yahoo Finance with caching support
